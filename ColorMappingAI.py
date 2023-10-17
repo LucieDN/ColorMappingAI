@@ -11,8 +11,9 @@ def Resolve(tab_soluce):
     return retour
 
 
-def Found_More_Constraint(tab_constraint)
-    counts = []
+
+#def Found_More_Constraint(tab_constraint)
+#    counts = []
 
 
 
