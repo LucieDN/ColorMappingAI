@@ -1,9 +1,11 @@
 ## Visualization
 
-# Create Random Graph
+# Importations
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
+import anything
 
 # Parameters
 nodes = ['A', 'B', 'C', 'D', 'E', 'F']
@@ -12,32 +14,48 @@ edges = [('A', 'B'),('A', 'C'),('B', 'C'),('C', 'D'),('D', 'F'),('D', 'E'),('E',
 
 # Create the corresponding graph
 G = nx.Graph()
-G.add_nodes_from(nodes)
+G.add_nodes_from(nodes, color='white') # White is considered as a non-affected color propriety
 G.add_edges_from(edges)
 
-
 # Plot the graph
-plt.figure(figsize=(8,8))
-nx.draw(G, with_labels = True)
+nx.draw(G, with_labels = True, node_color='white', node_size=800)# initial graph
 plt.show()
 
-##
 
-zones = ["A", "B", "C", "D"]
-constraints = [("A", "B"), ("A", "C"), ("B", "C"), ("C", "D")]
-soluce = ['n', 'n', 'n', 'n']
+## Color attributions
+color = np.random.choice(['red','green','blue'], size=len(G.nodes))
 
-def Resolve(tab_soluce):
-    bool = True
-    for i in range(len(tab_soluce)):
-        if tab_soluce[i] == 'n':
-            bool = False
-    return bool
+nx.set_node_attributes(G, dict(zip(G.nodes(), color)), 'color')
+nx.draw(G, with_labels = True, node_size=800, node_color=color)
+plt.show()
+
+#G.nodes['A']['color'] = 'red'
 
 
 
-#def Found_More_Constraint(tab_constraint)
-#    counts = []
+## Resolving functions
+
+
+def Find_More_Constraint():
+    maximum = 0
+    winner = 0
+    for node in G.nodes():
+        count = len(G.edges(node)) # Number of edges corresponding to the node
+        if maximum < count:
+            maximum = count
+            winner = node
+    return winner
+
+def Find_Possibilities(node):
+    possibilities = ['red', 'green', 'blue']
+
+    for border in G.edges(node):
+        node, neighbour = border
+        usedColor = G.nodes[neighbour]['color']
+        if usedColor != 'white' and usedColor in possibilities:
+            possibilities.remove(usedColor)
+
+    return possibilities
 
 
 
